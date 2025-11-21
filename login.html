@@ -1,0 +1,486 @@
+<!-- ==========================================
+     LOGIN PAGE - User Authentication
+     File: templates/login.html
+     Languages: HTML (40%), CSS (50%), JavaScript (10%)
+     Purpose: User login with social auth options
+     ========================================== -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- ========== HEAD SECTION ========== -->
+<!-- Contains metadata, title, and external resources -->
+<head>
+    <!-- Character encoding for international support -->
+    <meta charset="UTF-8">
+    
+    <!-- Responsive design for mobile devices -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Page title shown in browser tab -->
+    <title>Login - GoRide</title>
+    
+    <!-- Font Awesome icon library -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- ========== EMBEDDED CSS STYLES ========== -->
+    <style>
+        /* ========== GLOBAL RESET ========== */
+        /* Remove default browser styling */
+        * { 
+            margin: 0;              /* Remove all default margins */
+            padding: 0;             /* Remove all default padding */
+            box-sizing: border-box; /* Include padding in width calculations */
+        }
+        
+        /* ========== BODY STYLING ========== */
+        /* Main page background and layout */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Purple gradient */
+            min-height: 100vh;      /* Full viewport height */
+            display: flex;          /* Flexbox for centering */
+            align-items: center;    /* Vertical center */
+            justify-content: center; /* Horizontal center */
+            padding: 2rem;          /* Spacing around content */
+        }
+        
+        /* ========== ANIMATIONS ========== */
+        /* Floating animation for logo */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }      /* Start and end position */
+            50% { transform: translateY(-20px); }       /* Middle position (up) */
+        }
+        
+        /* Floating wave effect */
+.floating-text {
+  position: absolute;
+  top: 38%;
+  left: 37%;
+  transform: translate(-50%, -50%);
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #c9e8f0;
+  animation: waveFloat 4s ease-in-out infinite;
+}
+
+/* Keyframes for wave-like motion */
+@keyframes waveFloat {
+  0%   { transform: translate(-50%, -50%) translateX(0) translateY(0); }
+  25%  { transform: translate(-50%, -50%) translateX(10px) translateY(-15px); }
+  50%  { transform: translate(-50%, -50%) translateX(0) translateY(-30px); }
+  75%  { transform: translate(-50%, -50%) translateX(-10px) translateY(-15px); }
+  100% { transform: translate(-50%, -50%) translateX(0) translateY(0); }
+}
+
+        /* Slide in from bottom animation */
+        @keyframes slideIn {
+            from { 
+                opacity: 0;                 /* Start invisible */
+                transform: translateY(30px); /* Start 30px down */
+            }
+            to { 
+                opacity: 1;                 /* End visible */
+                transform: translateY(0);    /* End at normal position */
+            }
+        }
+        
+        /* ========== LOGIN CONTAINER ========== */
+        /* Main login box with two columns */
+        .login-container {
+            display: grid;                          /* CSS Grid layout */
+            grid-template-columns: 1fr 1fr;        /* Two equal columns */
+            max-width: 1000px;                     /* Maximum width */
+            background: white;                      /* White background */
+            border-radius: 20px;                    /* Rounded corners */
+            overflow: hidden;                       /* Hide overflow */
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3); /* Drop shadow */
+            animation: slideIn 0.6s ease-out;      /* Apply slide animation */
+        }
+        
+        /* ========== LEFT SIDE (PROMOTIONAL) ========== */
+        /* Purple gradient side with features */
+        .login-left {
+            background: linear-gradient(135deg, hsl(213, 40%, 61%) 0%, #a22496 100%); /* Purple gradient */
+            padding: 3rem;                          /* Inner spacing */
+            color: white;                           /* White text */
+            display: flex;                          /* Flexbox layout */
+            flex-direction: column;                 /* Stack vertically */
+            justify-content: center;                /* Center vertically */
+            align-items: center;                    /* Center horizontally */
+            text-align: center;                     /* Center text */
+        }
+        
+        /* ========== LOGO ========== */
+        /* Animated app logo */
+        .login-logo {
+            position: relative;
+            top: -9%;
+            width: 80px;                            /* Logo width */
+            height: 80px;                           /* Logo height */
+            background: white;                      /* White background */
+            border-radius: 20px;                    /* Rounded corners */
+            display: flex;                          /* Flexbox for centering */
+            align-items: center;                    /* Vertical center */
+            justify-content: center;                /* Horizontal center */
+            font-size: 2rem;                        /* Large text */
+            font-weight: bold;                      /* Bold text */
+            color: #667eea;                         /* Purple text */
+            margin-bottom: 2rem;                    /* Space below */
+            animation: float 3s ease-in-out infinite; /* Floating animation */
+        }
+        
+        /* ========== LEFT SIDE TEXT ========== */
+        .login-left h1 {
+            font-size: 2.5rem;      /* Large heading */
+            margin-bottom: 1rem;    /* Space below */
+        }
+        
+        .login-left p {
+            font-size: 1.1rem;      /* Slightly larger text */
+            opacity: 0.9;           /* Slightly transparent */
+            margin-bottom: 2rem;    /* Space below */
+        }
+        
+        /* ========== FEATURES LIST ========== */
+        /* List of app features */
+        .features {
+            text-align: left;       /* Align text to left */
+            margin-top: 2rem;       /* Space above */
+        }
+        
+        .feature-item {
+            display: flex;          /* Flexbox layout */
+            align-items: center;    /* Vertical center */
+            gap: 1rem;             /* Space between icon and text */
+            margin-bottom: 1rem;    /* Space below each item */
+        }
+        
+        .feature-item i {
+            font-size: 1.5rem;      /* Icon size */
+        }
+        
+        /* ========== RIGHT SIDE (LOGIN FORM) ========== */
+        /* White side with login form */
+        .login-right {
+            padding: 3rem;          /* Inner spacing */
+        }
+        
+        /* ========== FORM HEADER ========== */
+        .login-header {
+            margin-bottom: 2rem;    /* Space below */
+        }
+        
+        .login-header h2 {
+            font-size: 2rem;        /* Large heading */
+            margin-bottom: 0.5rem;  /* Space below */
+            color: #1f2937;         /* Dark gray */
+        }
+        
+        .login-header p {
+            color: #6b7280;         /* Medium gray */
+        }
+        
+        /* ========== ALERT MESSAGES ========== */
+        /* Success/Error message boxes */
+        .alert {
+            padding: 1rem;              /* Inner spacing */
+            border-radius: 10px;        /* Rounded corners */
+            margin-bottom: 1rem;        /* Space below */
+            animation: slideIn 0.5s ease-out; /* Slide in animation */
+        }
+        
+        /* Error alert styling */
+        .alert-error {
+            background: #fee2e2;        /* Light red background */
+            color: #991b1b;             /* Dark red text */
+            border: 1px solid #fecaca;  /* Light red border */
+        }
+        
+        /* Success alert styling */
+        .alert-success {
+            background: #d1fae5;        /* Light green background */
+            color: #065f46;             /* Dark green text */
+            border: 1px solid #a7f3d0;  /* Light green border */
+        }
+        
+        /* ========== FORM GROUPS ========== */
+        /* Form field containers */
+        .form-group {
+            margin-bottom: 1.5rem;      /* Space between fields */
+        }
+        
+        .form-group label {
+            display: block;             /* Block level element */
+            margin-bottom: 0.5rem;      /* Space below label */
+            font-weight: 500;           /* Medium bold */
+            color: #374151;             /* Dark gray */
+        }
+        
+        /* ========== INPUT WITH ICON ========== */
+        /* Input field with left icon */
+        .input-with-icon {
+            position: relative;         /* For absolute positioning of icon */
+        }
+        
+        .input-with-icon i {
+            position: absolute;         /* Absolute positioning */
+            left: 1rem;                 /* 1rem from left */
+            top: 50%;                   /* 50% from top */
+            transform: translateY(-50%); /* Center vertically */
+            color: #9ca3af;             /* Gray icon */
+        }
+        
+        .input-with-icon input {
+            width: 100%;                /* Full width */
+            padding: 0.875rem 1rem 0.875rem 3rem; /* Padding (left extra for icon) */
+            border: 2px solid #e5e7eb;  /* Light gray border */
+            border-radius: 10px;        /* Rounded corners */
+            font-size: 1rem;            /* Standard text size */
+            transition: all 0.3s;       /* Smooth transitions */
+        }
+        
+        /* Input focus state */
+        .input-with-icon input:focus {
+            outline: none;              /* Remove default outline */
+            border-color: #667eea;      /* Purple border */
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1); /* Purple glow */
+        }
+        
+        /* ========== FORGOT PASSWORD LINK ========== */
+        .forgot-password {
+            text-align: right;          /* Align to right */
+            margin-bottom: 1.5rem;      /* Space below */
+        }
+        
+        .forgot-password a {
+            color: #667eea;             /* Purple link */
+            text-decoration: none;      /* Remove underline */
+            font-size: 0.9rem;          /* Smaller text */
+        }
+        
+        .forgot-password a:hover {
+            text-decoration: underline; /* Underline on hover */
+        }
+        
+        /* ========== LOGIN BUTTON ========== */
+        .btn-login {
+            width: 100%;                /* Full width */
+            padding: 1rem;              /* Inner spacing */
+            background: linear-gradient(135deg, #667eea, #764ba2); /* Purple gradient */
+            color: white;               /* White text */
+            border: none;               /* No border */
+            border-radius: 10px;        /* Rounded corners */
+            font-size: 1rem;            /* Standard text size */
+            font-weight: bold;          /* Bold text */
+            cursor: pointer;            /* Pointer cursor */
+            transition: all 0.3s;       /* Smooth transitions */
+        }
+        
+        /* Button hover effect */
+        .btn-login:hover {
+            transform: translateY(-2px); /* Lift up */
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3); /* Purple shadow */
+        }
+        
+        /* Button active state */
+        .btn-login:active {
+            transform: translateY(0);   /* Return to normal */
+        }
+        
+        /* ========== DIVIDER ========== */
+        /* "or" divider between form and social login */
+        .divider {
+            text-align: center;         /* Center text */
+            margin: 1.5rem 0;           /* Vertical spacing */
+            color: #9ca3af;             /* Gray text */
+            position: relative;         /* For pseudo-elements */
+        }
+        
+        /* Horizontal lines on sides of "or" */
+        .divider::before,
+        .divider::after {
+            content: '';                /* Empty content */
+            position: absolute;         /* Absolute positioning */
+            top: 50%;                   /* 50% from top */
+            width: 40%;                 /* 40% width */
+            height: 1px;                /* 1px height */
+            background: #e5e7eb;        /* Light gray */
+        }
+        
+        .divider::before { left: 0; }  /* Left line */
+        .divider::after { right: 0; }  /* Right line */
+        
+        /* ========== SOCIAL LOGIN BUTTONS ========== */
+        .social-login {
+            display: grid;              /* Grid layout */
+            grid-template-columns: 1fr 1fr; /* Two equal columns */
+            gap: 1rem;                  /* Space between buttons */
+            margin-bottom: 1.5rem;      /* Space below */
+        }
+        
+        .btn-social {
+            padding: 0.75rem;           /* Inner spacing */
+            border: 2px solid #e5e7eb;  /* Light gray border */
+            border-radius: 10px;        /* Rounded corners */
+            background: white;          /* White background */
+            cursor: pointer;            /* Pointer cursor */
+            transition: all 0.3s;       /* Smooth transitions */
+            display: flex;              /* Flexbox layout */
+            align-items: center;        /* Vertical center */
+            justify-content: center;    /* Horizontal center */
+            gap: 0.5rem;               /* Space between icon and text */
+            font-weight: 500;           /* Medium bold */
+        }
+        
+        /* Social button hover effect */
+        .btn-social:hover {
+            border-color: #667eea;      /* Purple border */
+            background: #f9fafb;        /* Very light gray */
+        }
+        
+        /* ========== SIGNUP LINK ========== */
+        .signup-link {
+            text-align: center;         /* Center text */
+            color: #6b7280;             /* Gray text */
+        }
+        
+        .signup-link a {
+            color: #667eea;             /* Purple link */
+            text-decoration: none;      /* No underline */
+            font-weight: bold;          /* Bold text */
+        }
+        
+        .signup-link a:hover {
+            text-decoration: underline; /* Underline on hover */
+        }
+        
+        /* ========== RESPONSIVE DESIGN ========== */
+        /* Mobile layout adjustments */
+        @media (max-width: 768px) {
+            .login-container {
+                grid-template-columns: 1fr; /* Single column on mobile */
+            }
+            .login-left {
+                display: none;          /* Hide left side on mobile */
+            }
+        }
+    </style>
+</head>
+
+<!-- ========== BODY CONTENT ========== -->
+<body>
+    <!-- ========== MAIN LOGIN CONTAINER ========== -->
+    <div class="login-container">
+        
+        <!-- ========== LEFT SIDE (PROMOTIONAL) ========== -->
+        <!-- Purple side with app features -->
+        <div class="login-left">
+            <!-- Animated logo -->
+            <div class="login-logo">GO</div>
+            
+            <!-- Welcome message -->
+          <h1> <div class="floating-text">Welcome to GoRide</div> </h1>
+
+            <p>Your all-in-one transportation solution</p>
+            
+            <!-- Feature list -->
+            <div class="features">
+                <!-- Feature 1 -->
+                <div class="feature-item">
+                    <i class="fas fa-check-circle"></i>
+                    <div>Book rides, trains, flights & buses</div>
+                </div>
+                <!-- Feature 2 -->
+                <div class="feature-item">
+                    <i class="fas fa-check-circle"></i>
+                    <div>Compare prices instantly</div>
+                </div>
+                <!-- Feature 3 -->
+                <div class="feature-item">
+                    <i class="fas fa-check-circle"></i>
+                    <div>Safe & secure bookings</div>
+                </div>
+                <!-- Feature 4 -->
+                <div class="feature-item">
+                    <i class="fas fa-check-circle"></i>
+                    <div>24/7 customer support</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ========== RIGHT SIDE (LOGIN FORM) ========== -->
+        <div class="login-right">
+            <!-- Form header -->
+            <div class="login-header">
+                <h2>Sign In</h2>
+                <p>Welcome back! Please enter your details.</p>
+            </div>
+            
+            <!-- ========== FLASH MESSAGES ========== -->
+            <!-- Display success/error messages from Flask -->
+        
+                        <div class="alert alert-{{ category }}">
+                            <i class="fas fa-{{ 'exclamation-circle' if category == 'error' else 'check-circle' }}"></i>
+                        
+                        </div>
+                
+            
+            <!-- ========== LOGIN FORM ========== -->
+            <!-- Form submits to same route with POST method -->
+            <form method="POST">
+                <!-- Email field -->
+                <div class="form-group">
+                    <label>Email</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" name="email" placeholder="Enter your email" required>
+                    </div>
+                </div>
+                
+                <!-- Password field -->
+                <div class="form-group">
+                    <label>Password</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" name="password" placeholder="Enter your password" required>
+                    </div>
+                </div>
+                
+                <!-- Forgot password link -->
+                <div class="forgot-password">
+                    <a href="#">Forgot password?</a>
+                </div>
+                
+                <!-- Submit button -->
+                <button type="submit" class="btn-login">
+                    <i class="fas fa-sign-in-alt"></i> Sign In
+                </button>
+            </form>
+            
+            <!-- ========== DIVIDER ========== -->
+            <div class="divider">or</div>
+            
+            <!-- ========== SOCIAL LOGIN ========== -->
+            <!-- Google and Facebook login buttons -->
+            <div class="social-login">
+                <button class="btn-social">
+                    <i class="fab fa-google" style="color: #ea4335;"></i>
+                    Google
+                </button>
+                <button class="btn-social">
+                    <i class="fab fa-facebook" style="color: #1877f2;"></i>
+                    Facebook
+                </button>
+            </div>
+            
+            <!-- ========== SIGNUP LINK ========== -->
+            <!-- Link to registration page -->
+            <div class="signup-link">
+                Don't have an account? <a href="{{ url_for('register') }}">Sign up</a>
+            </div>
+        </div>
+        
+    </div>
+</body>
+</html>

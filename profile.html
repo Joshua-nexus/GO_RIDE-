@@ -1,0 +1,325 @@
+<!-- ==========================================
+     USER PROFILE PAGE
+     File: templates/profile.html
+     ========================================== -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - GoRide</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+        
+        .logo { display: flex; align-items: center; gap: 0.5rem; color: white; font-size: 1.5rem; font-weight: bold; }
+        .logo-icon { width: 40px; height: 40px; background: linear-gradient(135deg, #fbbf24 0%, #10b981 100%); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: black; font-weight: bold; }
+        .nav { display: flex; gap: 1.5rem; }
+        .nav a { color: white; text-decoration: none; padding: 0.5rem 1rem; border-radius: 8px; transition: all 0.3s; }
+        .nav a:hover, .nav a.active { background: rgba(255, 255, 255, 0.1); }
+        
+        .container { max-width: 1000px; margin: 2rem auto; padding: 0 2rem; }
+        
+        .profile-header {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            text-align: center;
+            animation: slideDown 0.6s ease-out;
+        }
+        
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #10b981, #3b82f6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+            margin: 0 auto 1rem;
+            font-weight: bold;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .profile-name {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .profile-email {
+            color: #6b7280;
+            font-size: 1.1rem;
+        }
+        
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 2px solid #f3f4f6;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .stat-label {
+            color: #6b7280;
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+        }
+        
+        .profile-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #374151;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .btn-primary {
+            width: 100%;
+            padding: 0.75rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+        
+        .menu-item {
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .menu-item:hover {
+            background: #f3f4f6;
+        }
+        
+        .menu-item i {
+            width: 24px;
+            text-align: center;
+            color: #667eea;
+        }
+        
+        @media (max-width: 768px) {
+            .profile-content { grid-template-columns: 1fr; }
+            .profile-stats { grid-template-columns: 1fr; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <div class="logo-icon">GO</div>
+            <span>GoRide</span>
+        </div>
+        <div class="nav">
+            <a href="{{ url_for('dashboard') }}"><i class="fas fa-home"></i> Dashboard</a>
+            <a href="{{ url_for('search') }}"><i class="fas fa-search"></i> Book</a>
+            <a href="{{ url_for('history') }}"><i class="fas fa-history"></i> History</a>
+            <a href="{{ url_for('profile') }}" class="active"><i class="fas fa-user"></i> Profile</a>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="profile-header">
+            <div class="profile-avatar">{{ user[0][0].upper() }}</div>
+            <div class="profile-name">{{ user[0] }}</div>
+            <div class="profile-email">{{ user[1] }}</div>
+            
+            <div class="profile-stats">
+                <div class="stat">
+                    <div class="stat-value">{{ total_bookings }}</div>
+                    <div class="stat-label">Total Trips</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">{{ (user[4][:10]) if user[4] else 'N/A' }}</div>
+                    <div class="stat-label">Member Since</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">4.9</div>
+                    <div class="stat-label">Rating</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="profile-content">
+            <div class="card">
+                <h2 class="card-title">
+                    <i class="fas fa-user-edit"></i>
+                    Edit Profile
+                </h2>
+                
+                <form method="POST" action="{{ url_for('update_profile') }}">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" name="name" value="{{ user[0] }}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" value="{{ user[1] }}" disabled style="background: #f3f4f6;">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="tel" name="phone" value="{{ user[2] if user[2] else '' }}" placeholder="+91 1234567890">
+                    </div>
+                    
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-save"></i> Save Changes
+                    </button>
+                </form>
+            </div>
+            
+            <div class="card">
+                <h2 class="card-title">
+                    <i class="fas fa-cog"></i>
+                    Account Settings
+                </h2>
+                
+                <div class="menu-item">
+                    <i class="fas fa-credit-card"></i>
+                    <div>
+                        <div style="font-weight: 500;">Payment Methods</div>
+                        <div style="font-size: 0.85rem; color: #6b7280;">Manage cards & wallets</div>
+                    </div>
+                </div>
+                
+                <div class="menu-item">
+                    <i class="fas fa-bell"></i>
+                    <div>
+                        <div style="font-weight: 500;">Notifications</div>
+                        <div style="font-size: 0.85rem; color: #6b7280;">Email & SMS preferences</div>
+                    </div>
+                </div>
+                
+                <div class="menu-item">
+                    <i class="fas fa-shield-alt"></i>
+                    <div>
+                        <div style="font-weight: 500;">Privacy & Security</div>
+                        <div style="font-size: 0.85rem; color: #6b7280;">Change password</div>
+                    </div>
+                </div>
+                
+                <div class="menu-item">
+                    <i class="fas fa-star"></i>
+                    <div>
+                        <div style="font-weight: 500;">Rewards</div>
+                        <div style="font-size: 0.85rem; color: #6b7280;">150 points available</div>
+                    </div>
+                </div>
+                
+                <div class="menu-item">
+                    <i class="fas fa-question-circle"></i>
+                    <div>
+                        <div style="font-weight: 500;">Help & Support</div>
+                        <div style="font-size: 0.85rem; color: #6b7280;">Get help anytime</div>
+                    </div>
+                </div>
+                
+                <div class="menu-item" onclick="if(confirm('Are you sure you want to logout?')) window.location.href='{{ url_for('logout') }}'">
+                    <i class="fas fa-sign-out-alt" style="color: #ef4444;"></i>
+                    <div>
+                        <div style="font-weight: 500; color: #ef4444;">Logout</div>
+                        <div style="font-size: 0.85rem; color: #6b7280;">Sign out of your account</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

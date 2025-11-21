@@ -1,0 +1,458 @@
+<!-- ==========================================
+     REGISTRATION PAGE - New User Signup
+     File: templates/register.html
+     Languages: HTML (35%), CSS (55%), JavaScript (10%)
+     Purpose: User registration with password strength indicator
+     ========================================== -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- ========== HEAD SECTION ========== -->
+<head>
+    <!-- Character encoding -->
+    <meta charset="UTF-8">
+    <!-- Viewport for responsive design -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Page title -->
+    <title>Register - GoRide</title>
+    <!-- Font Awesome icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- ========== EMBEDDED CSS STYLES ========== -->
+    <style>
+        /* ========== GLOBAL RESET ========== */
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+        
+        /* ========== BODY STYLING ========== */
+        /* Purple gradient background with centered content */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);  /* Purple gradient */
+            min-height: 100vh;          /* Full viewport height */
+            display: flex;              /* Flexbox for centering */
+            align-items: center;        /* Vertical center */
+            justify-content: center;    /* Horizontal center */
+            padding: 2rem;              /* Padding around content */
+        }
+        
+        /* ========== ANIMATIONS ========== */
+        /* Slide in from bottom */
+        @keyframes slideIn {
+            from { 
+                opacity: 0;                     /* Start invisible */
+                transform: translateY(30px);    /* Start 30px below */
+            }
+            to { 
+                opacity: 1;                     /* End visible */
+                transform: translateY(0);       /* End at normal position */
+            }
+        }
+        
+        /* Pulsing animation for logo */
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }       /* Normal size */
+            50% { transform: scale(1.05); }         /* Slightly larger */
+        }
+        
+        /* ========== REGISTRATION CONTAINER ========== */
+        /* Main registration box */
+        .register-container {
+            max-width: 500px;                   /* Maximum width */
+            width: 100%;                        /* Full width up to max */
+            background: white;                  /* White background */
+            border-radius: 20px;                /* Rounded corners */
+            padding: 3rem;                      /* Inner spacing */
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);  /* Drop shadow */
+            animation: slideIn 0.6s ease-out;   /* Slide in animation */
+        }
+        
+        /* ========== HEADER SECTION ========== */
+        /* Registration form header */
+        .register-header {
+            text-align: center;         /* Center text */
+            margin-bottom: 2rem;        /* Space below */
+        }
+        
+        /* ========== LOGO ========== */
+        /* Animated app logo */
+        .register-logo {
+            width: 80px;                /* Logo width */
+            height: 80px;               /* Logo height */
+            background: linear-gradient(135deg, #667eea, #764ba2);  /* Purple gradient */
+            border-radius: 20px;        /* Rounded corners */
+            display: flex;              /* Flexbox for centering */
+            align-items: center;        /* Vertical center */
+            justify-content: center;    /* Horizontal center */
+            font-size: 2rem;            /* Large text */
+            font-weight: bold;          /* Bold text */
+            color: white;               /* White text */
+            margin: 0 auto 1.5rem;      /* Center and space below */
+            animation: pulse 2s ease-in-out infinite;  /* Pulsing animation */
+        }
+        
+        /* ========== HEADER TEXT ========== */
+        .register-header h2 {
+            font-size: 2rem;            /* Large heading */
+            margin-bottom: 0.5rem;      /* Space below */
+            color: #1f2937;             /* Dark gray */
+        }
+        
+        .register-header p {
+            color: #6b7280;             /* Medium gray */
+        }
+        
+        /* ========== ALERT MESSAGES ========== */
+        /* Success/Error message boxes */
+        .alert {
+            padding: 1rem;              /* Inner spacing */
+            border-radius: 10px;        /* Rounded corners */
+            margin-bottom: 1rem;        /* Space below */
+            animation: slideIn 0.5s ease-out;  /* Slide animation */
+        }
+        
+        /* Error alert - red theme */
+        .alert-error {
+            background: #fee2e2;        /* Light red background */
+            color: #991b1b;             /* Dark red text */
+            border: 1px solid #fecaca;  /* Light red border */
+        }
+        
+        /* Success alert - green theme */
+        .alert-success {
+            background: #d1fae5;        /* Light green background */
+            color: #065f46;             /* Dark green text */
+            border: 1px solid #a7f3d0;  /* Light green border */
+        }
+        
+        /* ========== FORM GROUPS ========== */
+        /* Container for each form field */
+        .form-group {
+            margin-bottom: 1.5rem;      /* Space between fields */
+        }
+        
+        /* Form field labels */
+        .form-group label {
+            display: block;             /* Block level element */
+            margin-bottom: 0.5rem;      /* Space below label */
+            font-weight: 500;           /* Medium bold */
+            color: #374151;             /* Dark gray */
+        }
+        
+        /* ========== INPUT WITH ICON ========== */
+        /* Input container with left icon */
+        .input-with-icon {
+            position: relative;         /* For absolute positioning of icon */
+        }
+        
+        /* Icon styling */
+        .input-with-icon i {
+            position: absolute;         /* Absolute positioning */
+            left: 1rem;                 /* 1rem from left edge */
+            top: 50%;                   /* 50% from top */
+            transform: translateY(-50%);/* Center vertically */
+            color: #9ca3af;             /* Gray color */
+        }
+        
+        /* Input field styling */
+        .input-with-icon input {
+            width: 100%;                /* Full width */
+            padding: 0.875rem 1rem 0.875rem 3rem;  /* Padding (extra left for icon) */
+            border: 2px solid #e5e7eb;  /* Light gray border */
+            border-radius: 10px;        /* Rounded corners */
+            font-size: 1rem;            /* Standard text size */
+            transition: all 0.3s;       /* Smooth transitions */
+        }
+        
+        /* Input focus state - when user clicks in field */
+        .input-with-icon input:focus {
+            outline: none;              /* Remove default outline */
+            border-color: #667eea;      /* Purple border */
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);  /* Purple glow */
+        }
+        
+        /* ========== PASSWORD STRENGTH INDICATOR ========== */
+        /* Container for strength bar */
+        .password-strength {
+            margin-top: 0.5rem;         /* Space above */
+            height: 4px;                /* Bar height */
+            background: #e5e7eb;        /* Gray background */
+            border-radius: 2px;         /* Rounded corners */
+            overflow: hidden;           /* Hide overflow */
+        }
+        
+        /* Animated strength bar */
+        .password-strength-bar {
+            height: 100%;               /* Full height of container */
+            width: 0;                   /* Start at 0 width */
+            transition: all 0.3s;       /* Smooth width changes */
+            border-radius: 2px;         /* Rounded corners */
+        }
+        
+        /* Weak password - red bar at 33% width */
+        .strength-weak { 
+            width: 33%; 
+            background: #ef4444;        /* Red color */
+        }
+        
+        /* Medium password - orange bar at 66% width */
+        .strength-medium { 
+            width: 66%; 
+            background: #f59e0b;        /* Orange color */
+        }
+        
+        /* Strong password - green bar at 100% width */
+        .strength-strong { 
+            width: 100%; 
+            background: #10b981;        /* Green color */
+        }
+        
+        /* ========== REGISTER BUTTON ========== */
+        /* Main registration submit button */
+        .btn-register {
+            width: 100%;                /* Full width */
+            padding: 1rem;              /* Inner spacing */
+            background: linear-gradient(135deg, #667eea, #764ba2);  /* Purple gradient */
+            color: white;               /* White text */
+            border: none;               /* No border */
+            border-radius: 10px;        /* Rounded corners */
+            font-size: 1rem;            /* Standard text size */
+            font-weight: bold;          /* Bold text */
+            cursor: pointer;            /* Pointer cursor */
+            transition: all 0.3s;       /* Smooth transitions */
+        }
+        
+        /* Button hover effect */
+        .btn-register:hover {
+            transform: translateY(-2px);/* Lift up slightly */
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);  /* Purple shadow */
+        }
+        
+        /* Button active/pressed state */
+        .btn-register:active {
+            transform: translateY(0);   /* Return to normal position */
+        }
+        
+        /* ========== TERMS AND CONDITIONS ========== */
+        /* Small text below register button */
+        .terms {
+            margin-top: 1rem;           /* Space above */
+            font-size: 0.85rem;         /* Smaller text */
+            color: #6b7280;             /* Gray text */
+            text-align: center;         /* Center text */
+        }
+        
+        /* Links in terms text */
+        .terms a {
+            color: #667eea;             /* Purple links */
+            text-decoration: none;      /* No underline */
+        }
+        
+        /* Link hover effect */
+        .terms a:hover {
+            text-decoration: underline; /* Underline on hover */
+        }
+        
+        /* ========== DIVIDER ========== */
+        /* "or" text with horizontal lines */
+        .divider {
+            text-align: center;         /* Center text */
+            margin: 1.5rem 0;           /* Vertical spacing */
+            color: #9ca3af;             /* Gray text */
+            position: relative;         /* For pseudo-elements */
+        }
+        
+        /* Left and right horizontal lines */
+        .divider::before,
+        .divider::after {
+            content: '';                /* Empty content */
+            position: absolute;         /* Absolute positioning */
+            top: 50%;                   /* Vertically centered */
+            width: 40%;                 /* 40% of container width */
+            height: 1px;                /* 1px line height */
+            background: #e5e7eb;        /* Light gray line */
+        }
+        
+        .divider::before { left: 0; }  /* Left line */
+        .divider::after { right: 0; }  /* Right line */
+        
+        /* ========== LOGIN LINK ========== */
+        /* Link to login page for existing users */
+        .login-link {
+            text-align: center;         /* Center text */
+            color: #6b7280;             /* Gray text */
+        }
+        
+        /* Login link styling */
+        .login-link a {
+            color: #667eea;             /* Purple link */
+            text-decoration: none;      /* No underline */
+            font-weight: bold;          /* Bold text */
+        }
+        
+        /* Link hover effect */
+        .login-link a:hover {
+            text-decoration: underline; /* Underline on hover */
+        }
+        
+        /* ========== RESPONSIVE DESIGN ========== */
+        /* Mobile adjustments */
+        @media (max-width: 768px) {
+            .register-container {
+                padding: 2rem;          /* Less padding on mobile */
+            }
+        }
+    </style>
+</head>
+
+<!-- ========== BODY CONTENT ========== -->
+<body>
+    <!-- ========== MAIN REGISTRATION CONTAINER ========== -->
+    <div class="register-container">
+        
+        <!-- ========== HEADER SECTION ========== -->
+        <div class="register-header">
+            <!-- Animated pulsing logo -->
+            <div class="register-logo">GO</div>
+            <!-- Page title -->
+            <h2>Create Account</h2>
+            <!-- Subtitle -->
+            <p>Start your journey with GoRide today</p>
+        </div>
+        
+        <!-- ========== FLASH MESSAGES ========== -->
+        <!-- Display success/error messages from Flask backend -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <!-- Show alert with appropriate styling based on category -->
+                    <div class="alert alert-{{ category }}">
+                        <!-- Icon changes based on error/success -->
+                        <i class="fas fa-{{ 'exclamation-circle' if category == 'error' else 'check-circle' }}"></i>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        <!-- ========== REGISTRATION FORM ========== -->
+        <!-- Form submits to same route with POST method -->
+        <form method="POST" id="registerForm">
+            
+            <!-- ========== NAME FIELD ========== -->
+            <div class="form-group">
+                <label>Full Name</label>
+                <div class="input-with-icon">
+                    <!-- User icon -->
+                    <i class="fas fa-user"></i>
+                    <!-- Name input - required field -->
+                    <input type="text" name="name" placeholder="Enter your full name" required>
+                </div>
+            </div>
+            
+            <!-- ========== EMAIL FIELD ========== -->
+            <div class="form-group">
+                <label>Email</label>
+                <div class="input-with-icon">
+                    <!-- Envelope icon -->
+                    <i class="fas fa-envelope"></i>
+                    <!-- Email input - validates email format, required -->
+                    <input type="email" name="email" placeholder="Enter your email" required>
+                </div>
+            </div>
+            
+            <!-- ========== PHONE FIELD (OPTIONAL) ========== -->
+            <div class="form-group">
+                <label>Phone Number (Optional)</label>
+                <div class="input-with-icon">
+                    <!-- Phone icon -->
+                    <i class="fas fa-phone"></i>
+                    <!-- Phone input - not required -->
+                    <input type="tel" name="phone" placeholder="+91 1234567890">
+                </div>
+            </div>
+            
+            <!-- ========== PASSWORD FIELD ========== -->
+            <div class="form-group">
+                <label>Password</label>
+                <div class="input-with-icon">
+                    <!-- Lock icon -->
+                    <i class="fas fa-lock"></i>
+                    <!-- Password input - min 6 characters, required -->
+                    <input type="password" name="password" id="password" placeholder="Create a password" required minlength="6">
+                </div>
+                
+                <!-- ========== PASSWORD STRENGTH INDICATOR ========== -->
+                <!-- Visual bar showing password strength -->
+                <div class="password-strength">
+                    <!-- Bar fills and changes color based on strength -->
+                    <div class="password-strength-bar" id="strengthBar"></div>
+                </div>
+            </div>
+            
+            <!-- ========== SUBMIT BUTTON ========== -->
+            <!-- Creates new user account -->
+            <button type="submit" class="btn-register">
+                <i class="fas fa-user-plus"></i> Create Account
+            </button>
+            
+            <!-- ========== TERMS AND CONDITIONS ========== -->
+            <!-- Legal agreement text -->
+            <div class="terms">
+                By signing up, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+            </div>
+            
+        </form>
+        
+        <!-- ========== DIVIDER ========== -->
+        <div class="divider">or</div>
+        
+        <!-- ========== LOGIN LINK ========== -->
+        <!-- Link for existing users to sign in -->
+        <div class="login-link">
+            Already have an account? <a href="{{ url_for('login') }}">Sign in</a>
+        </div>
+        
+    </div>
+    
+    <!-- ========== JAVASCRIPT CODE ========== -->
+    <script>
+        // ========== PASSWORD STRENGTH CHECKER ==========
+        // Real-time password strength validation
+        
+        // Get password input and strength bar elements
+        const passwordInput = document.getElementById('password');
+        const strengthBar = document.getElementById('strengthBar');
+        
+        // Listen for password input changes
+        passwordInput.addEventListener('input', function() {
+            const password = this.value;    // Get current password value
+            let strength = 0;               // Initialize strength score
+            
+            // Calculate password strength based on criteria
+            if (password.length >= 6) strength++;           // Length >= 6 chars
+            if (password.length >= 8) strength++;           // Length >= 8 chars
+            if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++;  // Has lowercase AND uppercase
+            if (/\d/.test(password)) strength++;            // Has numbers
+            if (/[^a-zA-Z0-9]/.test(password)) strength++;  // Has special characters
+            
+            // Reset bar classes
+            strengthBar.className = 'password-strength-bar';
+            
+            // Apply appropriate strength class based on score
+            if (strength <= 2) {
+                strengthBar.classList.add('strength-weak');     // Red bar (weak)
+            } else if (strength <= 4) {
+                strengthBar.classList.add('strength-medium');   // Orange bar (medium)
+            } else {
+                strengthBar.classList.add('strength-strong');   // Green bar (strong)
+            }
+        });
+    </script>
+    
+</body>
+</html>
